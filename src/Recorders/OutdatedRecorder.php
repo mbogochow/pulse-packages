@@ -33,7 +33,9 @@ class OutdatedRecorder
 
     public function record(SharedBeat $event): void
     {
-        if (!$this->checkDue($event)) {
+        $hasData = !$this->pulse->values('composer_outdated', ['result'])->isEmpty() ||
+                    !$this->pulse->values('npm_outdated', ['result'])->isEmpty();
+        if ($hasData && !$this->checkDue($event)) {
             return;
         }
 
