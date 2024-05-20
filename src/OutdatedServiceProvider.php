@@ -15,8 +15,8 @@ class OutdatedServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'outdated');
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'npm_outdated');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'outdated');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'npm_outdated');
 
         $this->callAfterResolving('livewire', function (LivewireManager $livewire, Application $app) {
             $livewire->component('outdated', Outdated::class);
