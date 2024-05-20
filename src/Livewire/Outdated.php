@@ -16,14 +16,15 @@ class Outdated extends Card
     public function render()
     {
         // Get the data out of the Pulse data store.
-        $packages = Pulse::values('composer_outdated', ['result'])->first();
+        $outdated = Pulse::values('composer_outdated', ['time', 'result']);
 
-        $packages = $packages
-            ? json_decode($packages->value, associative: true, flags: JSON_THROW_ON_ERROR)['installed']
+        $packages = isset($outdated['result'])
+            ? json_decode($outdated['result']->value, associative: true, flags: JSON_THROW_ON_ERROR)['installed']
             : [];
 
         return View::make('outdated::livewire.outdated', [
             'packages' => $packages,
+            'time' => $outdated?->get('time')?->value ?? null,
         ]);
     }
 }

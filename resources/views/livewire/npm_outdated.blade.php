@@ -3,6 +3,11 @@
         <x-slot:icon>
             <x-dynamic-component :component="'pulse::icons.sparkles'" />
         </x-slot:icon>
+        @if ($time)
+            <x-slot:details>
+                Last updated: {{ $time }}
+            </x-slot:details>
+        @endif
     </x-pulse::card-header>
 
     <x-pulse::scroll :expand="$expand" wire:poll.5s="">

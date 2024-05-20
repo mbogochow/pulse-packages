@@ -69,6 +69,7 @@ class OutdatedRecorder
         json_decode($result->output(), flags: JSON_THROW_ON_ERROR);
 
         $this->pulse->set('composer_outdated', 'result', $result->output());
+        $this->pulse->set('composer_outdated', 'time', now());
     }
 
     /**
@@ -81,5 +82,6 @@ class OutdatedRecorder
         json_decode($npmResult->output(), flags: JSON_THROW_ON_ERROR);
 
         $this->pulse->set('npm_outdated', 'result', $npmResult->output());
+        $this->pulse->set('npm_outdated', 'time', now());
     }
 }

@@ -15,14 +15,15 @@ class NpmOutdated extends Card
     #[Lazy]
     public function render()
     {
-        $packages = Pulse::values('npm_outdated', ['result'])->first();
+        $outdated = Pulse::values('npm_outdated', ['result', 'time']);
 
-        $packages = $packages
-        ? json_decode($packages->value, associative: true, flags: JSON_THROW_ON_ERROR)
+        $packages = isset($outdated['result'])
+        ? json_decode($outdated['result']->value, associative: true, flags: JSON_THROW_ON_ERROR)
         : [];
 
         return View::make('npm_outdated::livewire.npm_outdated', [
             'packages' => $packages,
+            'time' => $outdated?->get('time')?->value ?? null,
         ]);
     }
 }
