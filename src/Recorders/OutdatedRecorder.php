@@ -5,6 +5,7 @@
 
 namespace AaronFrancis\Pulse\Outdated\Recorders;
 
+use AaronFrancis\Pulse\Outdated\ComposerVersionFilter;
 use Cron\CronExpression;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Process;
@@ -60,7 +61,28 @@ class OutdatedRecorder
      */
     private function runComposerOutdated()
     {
-        $result = Process::run('composer outdated -D -f json');
+        $args = [
+            '--direct',
+            '--format=json',
+            '--sort-by-age',
+        ];
+
+        $configValue = $this->getConfigValue('composer.version', null);
+        if ($configValue instanceof ComposerVersionFilter) {
+            $args[] = $configValue->value;
+        }
+
+        $excludedPackages = $this->getConfigValue('composer.exclude_packages', []);
+        foreach ($excludedPackages as $excludedPackage) {
+            $args[] = "--ignore=$excludedPackage";
+        }
+
+        $excludeDevPackages = $this->getConfigValue('composer.exclude_dev_packages', false);
+        if ($excludeDevPackages) {
+            $args[] = '--no-dev';
+        }
+
+        $result = Process::run('composer outdated ' . implode(' ', $args));
 
         if ($result->failed()) {
             throw new RuntimeException('Composer outdated failed: ' . $result->errorOutput());
@@ -83,5 +105,10 @@ class OutdatedRecorder
 
         $this->pulse->set('npm_outdated', 'result', $npmResult->output());
         $this->pulse->set('npm_outdated', 'time', now());
+    }
+
+    private function getConfigValue(string $configName, $default): mixed
+    {
+        return $this->config->get('pulse.recorders.' . static::class . ".$configName", $default);
     }
 }
