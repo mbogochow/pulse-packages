@@ -12,6 +12,8 @@ use Livewire\Attributes\Lazy;
 
 class Outdated extends Card
 {
+    public bool $showAge = false;
+
     #[Lazy]
     public function render()
     {
