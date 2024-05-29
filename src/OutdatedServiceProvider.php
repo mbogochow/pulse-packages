@@ -5,6 +5,7 @@
 
 namespace AaronFrancis\Pulse\Outdated;
 
+use AaronFrancis\Pulse\Outdated\Commands\OutdatedInvalidateCommand;
 use AaronFrancis\Pulse\Outdated\Livewire\NpmOutdated;
 use AaronFrancis\Pulse\Outdated\Livewire\Outdated;
 use Illuminate\Foundation\Application;
@@ -22,5 +23,11 @@ class OutdatedServiceProvider extends ServiceProvider
             $livewire->component('outdated', Outdated::class);
             $livewire->component('npm_outdated', NpmOutdated::class);
         });
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                OutdatedInvalidateCommand::class,
+            ]);
+        }
     }
 }

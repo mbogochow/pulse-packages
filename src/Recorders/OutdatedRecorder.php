@@ -34,14 +34,19 @@ class OutdatedRecorder
 
     public function record(SharedBeat $event): void
     {
-        $hasData = !$this->pulse->values('composer_outdated', ['result'])->isEmpty() ||
-                    !$this->pulse->values('npm_outdated', ['result'])->isEmpty();
-        if ($hasData && !$this->checkDue($event)) {
+        if (!$this->shouldRun($event)) {
             return;
         }
 
         $this->runComposerOutdated();
         $this->runNpmOutdated();
+    }
+
+    private function shouldRun(SharedBeat $event): bool
+    {
+        return $this->checkDue($event) ||
+               $this->pulse->values('composer_outdated', ['result'])->isEmpty() ||
+               $this->pulse->values('npm_outdated', ['result'])->isEmpty();
     }
 
     private function checkDue(SharedBeat $event): bool
