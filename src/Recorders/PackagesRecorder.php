@@ -1,11 +1,8 @@
 <?php
-/**
- * @author Aaron Francis <aarondfrancis@gmail.com|https://twitter.com/aarondfrancis>
- */
 
-namespace AaronFrancis\Pulse\Outdated\Recorders;
+namespace Bogochow\Pulse\Packages\Recorders;
 
-use AaronFrancis\Pulse\Outdated\ComposerVersionFilter;
+use Bogochow\Pulse\Packages\ComposerVersionFilter;
 use Cron\CronExpression;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Facades\Process;
@@ -13,7 +10,7 @@ use Laravel\Pulse\Events\SharedBeat;
 use Laravel\Pulse\Pulse;
 use RuntimeException;
 
-class OutdatedRecorder
+class PackagesRecorder
 {
     /**
      * The events to listen for.
@@ -45,8 +42,8 @@ class OutdatedRecorder
     private function shouldRun(SharedBeat $event): bool
     {
         return $this->checkDue($event) ||
-               $this->pulse->values('composer_outdated', ['result'])->isEmpty() ||
-               $this->pulse->values('npm_outdated', ['result'])->isEmpty();
+               $this->pulse->values('composer_packages', ['result'])->isEmpty() ||
+               $this->pulse->values('npm_packages', ['result'])->isEmpty();
     }
 
     private function checkDue(SharedBeat $event): bool
@@ -95,8 +92,8 @@ class OutdatedRecorder
 
         json_decode($result->output(), flags: JSON_THROW_ON_ERROR);
 
-        $this->pulse->set('composer_outdated', 'result', $result->output());
-        $this->pulse->set('composer_outdated', 'time', now());
+        $this->pulse->set('composer_packages', 'result', $result->output());
+        $this->pulse->set('composer_packages', 'time', now());
     }
 
     /**
@@ -104,12 +101,13 @@ class OutdatedRecorder
      */
     private function runNpmOutdated()
     {
-        $npmResult = Process::run('npm outdated --long --json');
+        $result = Process::run('npm outdated --long --json');
+        // don't check return value since it will be non-zero even on success
 
-        json_decode($npmResult->output(), flags: JSON_THROW_ON_ERROR);
+        json_decode($result->output(), flags: JSON_THROW_ON_ERROR);
 
-        $this->pulse->set('npm_outdated', 'result', $npmResult->output());
-        $this->pulse->set('npm_outdated', 'time', now());
+        $this->pulse->set('npm_packages', 'result', $result->output());
+        $this->pulse->set('npm_packages', 'time', now());
     }
 
     private function getConfigValue(string $configName, $default): mixed

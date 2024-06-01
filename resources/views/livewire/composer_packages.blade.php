@@ -1,5 +1,5 @@
 <x-pulse::card :cols="$cols" :rows="$rows" :class="$class">
-    <x-pulse::card-header name="Outdated NPM Dependencies">
+    <x-pulse::card-header name="Composer Dependencies">
         <x-slot:icon>
             <x-dynamic-component :component="'pulse::icons.sparkles'" />
         </x-slot:icon>
@@ -21,34 +21,47 @@
                         <col style="width: 50%" />
                         <col />
                         <col />
+                        @if ($showAge)
+                            <col />
+                        @endif
                     </colgroup>
                     <x-pulse::thead>
                         <tr>
                             <x-pulse::th>Package</x-pulse::th>
                             <x-pulse::th class="text-right">Installed</x-pulse::th>
                             <x-pulse::th class="text-right">Available</x-pulse::th>
+                            @if ($showAge)
+                                <x-pulse::th class="text-right">Release Age</x-pulse::th>
+                            @endif
                         </tr>
                     </x-pulse::thead>
                     <tbody>
-                    @foreach ($changePackages as $key => $package)
+                    @foreach ($changePackages as $package)
                         <tr class="h-2 first:h-0"></tr>
-                        <tr wire:key="{{ $key }}">
+                        <tr wire:key="{{ $package['name'] }}">
                             <x-pulse::td class="max-w-[1px]">
-                                <code class="block text-xs text-gray-900 dark:text-gray-100 truncate" title="">
-                                    {{ $key }}
-                                </code>
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 truncate" title="">
-                                    <a href='{{ $package['homepage'] }}'>
-                                        {{ str($package['homepage'])->after('://') }}
-                                    </a>
-                                </p>
+                            <code class="block text-xs text-gray-900 dark:text-gray-100 truncate" title="">
+                                {{ $package['name'] }}
+                            </code>
+                                @isset($package['source'])
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 truncate" title="">
+                                        <a href='{{ $package['source'] }}'>
+                                            {{ str($package['source'])->after('://') }}
+                                        </a>
+                                    </p>
+                                @endisset
                             </x-pulse::td>
                             <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
-                                {{ $package['current'] }}
+                                {{ $package['version'] }}
                             </x-pulse::td>
                             <x-pulse::td numeric class="text-gray-700 dark:text-gray-300 font-bold">
                                 {{ $package['latest'] }}
                             </x-pulse::td>
+                            @if ($showAge)
+                                <x-pulse::td date class="text-gray-700 dark:text-gray-300 font-bold">
+                                    {{ $package['release-age'] }}
+                                </x-pulse::td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>

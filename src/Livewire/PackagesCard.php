@@ -1,10 +1,10 @@
 <?php
 
-namespace AaronFrancis\Pulse\Outdated\Livewire;
+namespace Bogochow\Pulse\Packages\Livewire;
 
 use Laravel\Pulse\Livewire\Card;
 
-class OutdatedCard extends Card
+class PackagesCard extends Card
 {
     protected string $installedKey = 'version';
     protected string $latestKey = 'latest';

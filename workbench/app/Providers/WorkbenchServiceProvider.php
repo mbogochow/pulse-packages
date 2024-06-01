@@ -2,7 +2,7 @@
 
 namespace Workbench\App\Providers;
 
-use AaronFrancis\Pulse\Outdated\Recorders\OutdatedRecorder;
+use Bogochow\Pulse\Packages\Recorders\PackagesRecorder;
 use Illuminate\Support\ServiceProvider;
 
 class WorkbenchServiceProvider extends ServiceProvider
@@ -13,7 +13,7 @@ class WorkbenchServiceProvider extends ServiceProvider
     public function register(): void
     {
         config(['pulse.recorders' => [
-            OutdatedRecorder::class => []
+            PackagesRecorder::class => []
         ]]);
     }
 

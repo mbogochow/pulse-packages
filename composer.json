@@ -1,12 +1,12 @@
 {
-    "name": "aaronfrancis/pulse-outdated",
-    "description": "A Laravel Pulse card to show outdated composer and npm dependencies",
+    "name": "mbogochow/pulse-packages",
+    "description": "A Laravel Pulse card to show Composer and NPM package status",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Aaron Francis",
-            "email": "aarondfrancis@gmail.com"
+            "name": "Mike Bogochow",
+            "email": "bogo.devel@gmail.com"
         }
     ],
     "require": {
@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AaronFrancis\\Pulse\\Outdated\\": "src/"
+            "Bogochow\\Pulse\\Packages\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AaronFrancis\\Pulse\\Outdated\\Tests\\": "tests/",
+            "Bogochow\\Pulse\\Packages\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/",
             "Workbench\\Database\\Factories\\": "workbench/database/factories/",
             "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
@@ -35,7 +35,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AaronFrancis\\Pulse\\Outdated\\OutdatedServiceProvider"
+                "Bogochow\\Pulse\\Packages\\PulsePackagesServiceProvider"
             ]
         }
     },

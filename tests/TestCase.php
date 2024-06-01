@@ -1,6 +1,6 @@
 <?php
 
-namespace AaronFrancis\Pulse\Outdated\Tests;
+namespace Bogochow\Pulse\Packages\Tests;
 
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Orchestra\Testbench\Concerns\WithWorkbench;

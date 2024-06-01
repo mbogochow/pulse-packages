@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         UserFactory::new()->create([
-            'name' => 'Aaron Francis',
-            'email' => 'aarondfrancis@gmail.com',
+            'name' => 'Mike Bogochow',
+            'email' => 'bogo.devel@gmail.com',
         ]);
     }
 }

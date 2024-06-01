@@ -1,6 +1,6 @@
 <?php
 
-namespace AaronFrancis\Pulse\Outdated;
+namespace Bogochow\Pulse\Packages;
 
 enum ComposerVersionFilter: string
 {

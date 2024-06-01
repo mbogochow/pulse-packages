@@ -1,7 +1,7 @@
 providers:
   - Livewire\LivewireServiceProvider
   - Laravel\Pulse\PulseServiceProvider
-  - AaronFrancis\Pulse\Outdated\OutdatedServiceProvider
+  - Bogochow\Pulse\Packages\PulsePackagesServiceProvider
   - Workbench\App\Providers\WorkbenchServiceProvider
 
 migrations:
@@ -12,7 +12,7 @@ seeders:
 
 workbench:
   start: '/pulse'
-  user: 'aarondfrancis@gmail.com'
+  user: 'bogo.devel@gmail.com'
   install: true
   discovers:
     web: true
