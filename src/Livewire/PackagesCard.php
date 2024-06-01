@@ -7,6 +7,7 @@ use Laravel\Pulse\Livewire\Card;
 class PackagesCard extends Card
 {
     protected string $installedKey = 'version';
+
     protected string $latestKey = 'latest';
 
     protected function parsePackages(array $packages): array

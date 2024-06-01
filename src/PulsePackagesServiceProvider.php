@@ -2,12 +2,12 @@
 
 namespace Bogochow\Pulse\Packages;
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\ServiceProvider;
-use Livewire\LivewireManager;
 use Bogochow\Pulse\Packages\Commands\PulsePackagesClearCommand;
 use Bogochow\Pulse\Packages\Livewire\ComposerPackages;
 use Bogochow\Pulse\Packages\Livewire\NpmPackages;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
+use Livewire\LivewireManager;
 
 class PulsePackagesServiceProvider extends ServiceProvider
 {
