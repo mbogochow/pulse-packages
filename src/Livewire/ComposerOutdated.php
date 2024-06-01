@@ -9,22 +9,23 @@ use Illuminate\Support\Facades\View;
 use Laravel\Pulse\Facades\Pulse;
 use Livewire\Attributes\Lazy;
 
-class NpmOutdated extends OutdatedCard
+class ComposerOutdated extends OutdatedCard
 {
-    protected string $installedKey = 'current';
+    public bool $showAge = false;
 
     #[Lazy]
     public function render()
     {
-        $outdated = Pulse::values('npm_outdated', ['result', 'time']);
+        // Get the data out of the Pulse data store.
+        $outdated = Pulse::values('composer_outdated', ['time', 'result']);
 
         $packages = isset($outdated['result'])
-        ? json_decode($outdated['result']->value, associative: true, flags: JSON_THROW_ON_ERROR)
-        : [];
+            ? json_decode($outdated['result']->value, associative: true, flags: JSON_THROW_ON_ERROR)['installed']
+            : [];
 
         $packages = $this->parsePackages($packages);
 
-        return View::make('npm_outdated::livewire.npm_outdated', [
+        return View::make('outdated::livewire.composer_outdated', [
             'packages' => $packages,
             'time' => $outdated?->get('time')?->value ?? null,
         ]);
