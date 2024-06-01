@@ -5,7 +5,7 @@
 
 namespace AaronFrancis\Pulse\Outdated;
 
-use AaronFrancis\Pulse\Outdated\Commands\OutdatedInvalidateCommand;
+use AaronFrancis\Pulse\Outdated\Commands\OutdatedClearCommand;
 use AaronFrancis\Pulse\Outdated\Livewire\NpmOutdated;
 use AaronFrancis\Pulse\Outdated\Livewire\Outdated;
 use Illuminate\Foundation\Application;
@@ -26,7 +26,7 @@ class OutdatedServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                OutdatedInvalidateCommand::class,
+                OutdatedClearCommand::class,
             ]);
         }
     }

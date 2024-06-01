@@ -5,9 +5,9 @@ namespace AaronFrancis\Pulse\Outdated\Commands;
 use Illuminate\Console\Command;
 use Laravel\Pulse\Pulse;
 
-class OutdatedInvalidateCommand extends Command
+class OutdatedClearCommand extends Command
 {
-    protected $signature = 'outdated:purge';
+    protected $signature = 'outdated:clear';
 
     protected $description = 'Purge the stored outdated data. It will be rewritten if pulse:check is running.';
 
