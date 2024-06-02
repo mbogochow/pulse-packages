@@ -113,7 +113,7 @@ class PackagesRecorder
 
         $result = Process::run('composer audit ' . implode(' ', $args));
 
-        if ($result->failed() && '' !== $result->errorOutput()) {
+        if ($result->failed() && $result->errorOutput() !== '') {
             throw new RuntimeException('Composer audit failed: ' . $result->errorOutput());
         }
 
@@ -129,7 +129,7 @@ class PackagesRecorder
     {
         $result = Process::run('npm outdated --long --json');
 
-        if ($result->failed() && '' !== $result->errorOutput()) {
+        if ($result->failed() && $result->errorOutput() !== '') {
             throw new RuntimeException('NPM outdated failed: ' . $result->errorOutput());
         }
 
