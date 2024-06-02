@@ -13,18 +13,21 @@ class ComposerPackages extends PackagesCard
     #[Lazy]
     public function render()
     {
-        // Get the data out of the Pulse data store.
-        $outdated = Pulse::values('composer_packages', ['time', 'result']);
+        $composerData = Pulse::values('composer_packages', ['time', 'outdated', 'audit']);
 
-        $packages = isset($outdated['result'])
-            ? json_decode($outdated['result']->value, associative: true, flags: JSON_THROW_ON_ERROR)['installed']
+        $outdatedPackages = isset($composerData['outdated'])
+            ? json_decode($composerData['outdated']->value, associative: true, flags: JSON_THROW_ON_ERROR)['installed']
+            : [];
+        $auditedPackages = isset($composerData['audit'])
+            ? json_decode($composerData['audit']->value, associative: true, flags: JSON_THROW_ON_ERROR)
             : [];
 
-        $packages = $this->parsePackages($packages);
+        $outdatedPackages = $this->parsePackages($outdatedPackages);
 
         return View::make('packages::livewire.composer_packages', [
-            'packages' => $packages,
-            'time' => $outdated?->get('time')?->value ?? null,
+            'outdated' => $outdatedPackages,
+            'audit' => $auditedPackages,
+            'time' => $composerData?->get('time')?->value ?? null,
         ]);
     }
 }

@@ -36,14 +36,15 @@ class PackagesRecorder
         }
 
         $this->runComposerOutdated();
+        $this->runComposerAudit();
         $this->runNpmOutdated();
     }
 
     private function shouldRun(SharedBeat $event): bool
     {
         return $this->checkDue($event) ||
-               $this->pulse->values('composer_packages', ['result'])->isEmpty() ||
-               $this->pulse->values('npm_packages', ['result'])->isEmpty();
+               $this->pulse->values('composer_packages', ['time'])->isEmpty() ||
+               $this->pulse->values('npm_packages', ['time'])->isEmpty();
     }
 
     private function checkDue(SharedBeat $event): bool
@@ -92,8 +93,33 @@ class PackagesRecorder
 
         json_decode($result->output(), flags: JSON_THROW_ON_ERROR);
 
-        $this->pulse->set('composer_packages', 'result', $result->output());
+        $this->pulse->set('composer_packages', 'outdated', $result->output());
         $this->pulse->set('composer_packages', 'time', now());
+    }
+
+    /**
+     * @throws \JsonException
+     */
+    private function runComposerAudit()
+    {
+        $args = [
+            '--format=json',
+        ];
+
+        $excludeDevPackages = $this->getConfigValue('composer.exclude_dev_packages', false);
+        if ($excludeDevPackages) {
+            $args[] = '--no-dev';
+        }
+
+        $result = Process::run('composer audit ' . implode(' ', $args));
+
+        if ($result->failed() && '' !== $result->errorOutput()) {
+            throw new RuntimeException('Composer audit failed: ' . $result->errorOutput());
+        }
+
+        json_decode($result->output(), flags: JSON_THROW_ON_ERROR);
+
+        $this->pulse->set('composer_packages', 'audit', $result->output());
     }
 
     /**
@@ -102,11 +128,14 @@ class PackagesRecorder
     private function runNpmOutdated()
     {
         $result = Process::run('npm outdated --long --json');
-        // don't check return value since it will be non-zero even on success
+
+        if ($result->failed() && '' !== $result->errorOutput()) {
+            throw new RuntimeException('NPM outdated failed: ' . $result->errorOutput());
+        }
 
         json_decode($result->output(), flags: JSON_THROW_ON_ERROR);
 
-        $this->pulse->set('npm_packages', 'result', $result->output());
+        $this->pulse->set('npm_packages', 'outdated', $result->output());
         $this->pulse->set('npm_packages', 'time', now());
     }
 

@@ -11,10 +11,10 @@
     </x-pulse::card-header>
 
     <x-pulse::scroll :expand="$expand" wire:poll.5s="">
-        @if (!count($packages))
+        @if (empty($outdated))
             <x-pulse::no-results />
         @else
-            @foreach ($packages as $change => $changePackages)
+            @foreach ($outdated as $change => $changePackages)
                 <h1 class="font-bold mt-2">{{ ucfirst($change)  }} Changes</h1>
                 <x-pulse::table>
                     <colgroup>

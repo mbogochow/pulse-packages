@@ -13,17 +13,17 @@ class NpmPackages extends PackagesCard
     #[Lazy]
     public function render()
     {
-        $outdated = Pulse::values('npm_packages', ['result', 'time']);
+        $packages = Pulse::values('npm_packages', ['outdated', 'time']);
 
-        $packages = isset($outdated['result'])
-        ? json_decode($outdated['result']->value, associative: true, flags: JSON_THROW_ON_ERROR)
+        $outdatedPackages = isset($packages['outdated'])
+        ? json_decode($packages['outdated']->value, associative: true, flags: JSON_THROW_ON_ERROR)
         : [];
 
-        $packages = $this->parsePackages($packages);
+        $outdatedPackages = $this->parsePackages($outdatedPackages);
 
         return View::make('packages::livewire.npm_packages', [
-            'packages' => $packages,
-            'time' => $outdated?->get('time')?->value ?? null,
+            'outdated' => $outdatedPackages,
+            'time' => $packages?->get('time')?->value ?? null,
         ]);
     }
 }
